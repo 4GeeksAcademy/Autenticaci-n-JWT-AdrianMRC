@@ -19,7 +19,11 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 # Configurar CORS para permitir solicitudes desde el frontend
-CORS(app, origins=["https://turbo-disco-v6qx4v46jjx4fx4wv-3000.app.github.dev"])
+CORS(app, origins=[
+    "https://bug-free-carnival-x5vj6w65gx69cvxqv-3000.app.github.dev/",
+    "http://localhost:3000",  # Para desarrollo local
+    "http://127.0.0.1:3000"   # Para desarrollo local alternativo
+])
 
 # Configurar JWT
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")

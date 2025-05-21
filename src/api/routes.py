@@ -75,3 +75,20 @@ def create_user():
         print(e)
         db.session.rollback()
         return jsonify({"message": "Error en el servidor al crear el usuario"}), 500
+    
+@api.route('/validate-token', methods=['GET'])
+@jwt_required()
+def validate_token():
+    try:
+        user_id = get_jwt_identity()
+        current_user = User.query.get(user_id)
+        
+        if not current_user:
+            return jsonify({'message': 'User not found'}), 404
+        
+        return jsonify({
+            'message': 'Token is valid',
+            'user': current_user.serialize()
+        }), 200
+    except Exception as e:
+        return jsonify({'message': f'Error validating token: {str(e)}'}), 500
