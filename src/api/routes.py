@@ -8,12 +8,14 @@ api = Blueprint('api', __name__)
 
 bcrypt = Bcrypt()
 
+
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
     response_body = {
-        "message": "¡Hola! Soy un mensaje desde el backend, revisa la pestaña de red en el inspector de Google."
+        "message": "¡Hola! Soy un mensaje desde el backend"
     }
     return jsonify(response_body), 200
+
 
 @api.route('/public', methods=['GET'])
 def public_route():
@@ -21,6 +23,7 @@ def public_route():
         "message": "Hola, soy una ruta pública"
     }
     return jsonify(response_body), 200
+
 
 @api.route('/private', methods=['GET'])
 @jwt_required()
@@ -33,6 +36,7 @@ def private_route():
         "message": f"Hola {user.email}, soy una ruta privada"
     }
     return jsonify(response_body), 200
+
 
 @api.route('/user/login', methods=["POST"])
 def sign_in():
@@ -53,6 +57,7 @@ def sign_in():
         db.session.rollback()
         return jsonify({"message": "Error en el servidor"}), 500
 
+
 @api.route('/user/create', methods=["POST"])
 def create_user():
     data_request = request.get_json()
@@ -63,29 +68,38 @@ def create_user():
     # Validación adicional de contraseña (opcional)
     if len(data_request["password"]) < 8:
         return jsonify({"message": "La contraseña debe tener al menos 8 caracteres"}), 400
-    new_user = User(
-        email=data_request["email"],
-        password=bcrypt.generate_password_hash(data_request["password"]).decode('utf-8')
-    )
     try:
+        # Crear nuevo usuario
+        hashed_password = bcrypt.generate_password_hash(data_request["password"]).decode('utf-8')
+        new_user = User(
+            email=data_request["email"],
+            password=hashed_password
+        )
+        
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"message": "Usuario creado exitosamente"}), 201
+        
+        return jsonify({
+            "message": "Usuario creado exitosamente",
+            "user": new_user.serialize()
+        }), 201
+        
     except Exception as e:
         print(e)
         db.session.rollback()
-        return jsonify({"message": "Error en el servidor al crear el usuario"}), 500
-    
+        return jsonify({"message": "Error al crear el usuario"}), 500
+
+
 @api.route('/validate-token', methods=['GET'])
 @jwt_required()
 def validate_token():
     try:
         user_id = get_jwt_identity()
         current_user = User.query.get(user_id)
-        
+
         if not current_user:
             return jsonify({'message': 'User not found'}), 404
-        
+
         return jsonify({
             'message': 'Token is valid',
             'user': current_user.serialize()

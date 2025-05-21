@@ -18,9 +18,6 @@ const Navbar = () => {
                     {/* Logo/Brand */}
                     <div className="flex items-center">
                         <Link to="/" className="flex-shrink-0 flex items-center">
-                            <span className="text-xl font-bold text-indigo-600">
-                                AuthApp
-                            </span>
                         </Link>
                     </div>
 

@@ -43,7 +43,7 @@ const Signup = () => {
         if (!formData.password) {
             newErrors.password = 'Password is required';
         } else if (formData.password.length < 8) {
-            newErrors.password = 'Password must be at least 6 characters';
+            newErrors.password = 'Password must be at least 8 characters';
         }
         
         // Validar confirmación de contraseña
@@ -71,7 +71,7 @@ const Signup = () => {
             }, 1500);
         }
     };
-
+                  
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">

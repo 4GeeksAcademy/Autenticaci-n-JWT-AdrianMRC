@@ -1,5 +1,6 @@
 const getState = ({ getStore, getActions, setStore }) => {
     return {
+        
         store: {
             token: localStorage.getItem("token") || null,
             user: JSON.parse(localStorage.getItem("user")) || null,
@@ -9,6 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
         actions: {
             // Función para hacer login
+            
             login: async (email, password) => {
                 setStore({ loading: true, message: null });
                 try {
@@ -174,5 +176,5 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
     };
 };
-
+console.log("BACKEND_URL:", import.meta.env.VITE_BACKEND_URL);
 export default getState;
