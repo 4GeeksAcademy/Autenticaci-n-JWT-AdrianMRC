@@ -20,7 +20,7 @@ app.url_map.strict_slashes = False
 
 # Configurar CORS para permitir solicitudes desde el frontend
 CORS(app, origins=[
-    "https://bug-free-carnival-x5vj6w65gx69cvxqv-3000.app.github.dev/",
+    "https://miniature-bassoon-5gxw6q6g79q43vvqr-3000.app.github.dev",
     "http://localhost:3000",  # Para desarrollo local
     "http://127.0.0.1:3000"   # Para desarrollo local alternativo
 ])
