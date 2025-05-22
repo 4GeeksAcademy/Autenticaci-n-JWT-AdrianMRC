@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AppContext } from "../context/AppContext";
+// Importa los componentes de React-Bootstrap que vamos a usar
+import { Container, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 
 const Login = () => {
     const { store, actions } = useContext(AppContext);
@@ -24,7 +26,7 @@ const Login = () => {
             ...prev,
             [name]: value
         }));
-        
+
         // Limpiar error específico cuando el usuario empiece a escribir
         if (errors[name]) {
             setErrors(prev => ({
@@ -36,7 +38,7 @@ const Login = () => {
 
     const validateForm = () => {
         const newErrors = {};
-        
+
         // Validar email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!formData.email) {
@@ -44,23 +46,23 @@ const Login = () => {
         } else if (!emailRegex.test(formData.email)) {
             newErrors.email = 'Please enter a valid email';
         }
-        
+
         // Validar contraseña
         if (!formData.password) {
             newErrors.password = 'Password is required';
         }
-        
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!validateForm()) return;
-        
+
         const result = await actions.login(formData.email, formData.password);
-        
+
         if (result.success) {
             // Redirigir a la página privada después del login exitoso
             navigate('/private');
@@ -68,98 +70,110 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Sign in to your account
-                    </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        Or{' '}
-                        <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
-                            create a new account
-                        </Link>
-                    </p>
-                </div>
-                
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
-                            <label htmlFor="email" className="sr-only">
-                                Email address
-                            </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                                    errors.email ? 'border-red-300' : 'border-gray-300'
-                                } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                                placeholder="Email address"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                            {errors.email && (
-                                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                            )}
+        // min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8
+        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light py-5">
+            <Container className="px-4"> {/* max-w-md w-full space-y-8 */}
+                <Card className="shadow-lg p-4 p-md-5 mx-auto" style={{ maxWidth: '450px' }}> {/* w-full space-y-8, max-w-md */}
+                    <Card.Body>
+                        <div className="text-center mb-5">
+                            <h2 className="h3 fw-bold text-dark mb-2"> {/* mt-6 text-center text-3xl font-extrabold text-gray-900 */}
+                                Sign in to your account
+                            </h2>
+                            <p className="text-muted small"> {/* mt-2 text-center text-sm text-gray-600 */}
+                                Or{' '}
+                                <Link to="/signup" className="text-primary fw-medium text-decoration-none"> {/* font-medium text-indigo-600 hover:text-indigo-500 */}
+                                    create a new account
+                                </Link>
+                            </p>
                         </div>
-                        
-                        <div>
-                            <label htmlFor="password" className="sr-only">
-                                Password
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                                    errors.password ? 'border-red-300' : 'border-gray-300'
-                                } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                            {errors.password && (
-                                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-                            )}
-                        </div>
-                    </div>
 
-                    {store.message && (
-                        <div className={`rounded-md p-4 ${
-                            store.message.includes('successful') || store.message.includes('success')
-                                ? 'bg-green-50 text-green-800'
-                                : 'bg-red-50 text-red-800'
-                        }`}>
-                            <p className="text-sm">{store.message}</p>
-                        </div>
-                    )}
+                        <Form onSubmit={handleSubmit}> {/* mt-8 space-y-6 */}
+                            {/* Email Input */}
+                            <Form.Group className="mb-3"> {/* Equivalente a un div que contiene label e input */}
+                                <Form.Label htmlFor="email" className="visually-hidden"> {/* sr-only */}
+                                    Email address
+                                </Form.Label>
+                                <Form.Control
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    autoComplete="email"
+                                    required
+                                    // isInvalid={!!errors.email} se utiliza para aplicar estilos de error de Bootstrap
+                                    className={errors.email ? 'is-invalid' : ''} // Tailwind: border-red-300 / border-gray-300
+                                    placeholder="Email address"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                />
+                                {errors.email && (
+                                    <Form.Control.Feedback type="invalid"> {/* mt-1 text-sm text-red-600 */}
+                                        {errors.email}
+                                    </Form.Control.Feedback>
+                                )}
+                            </Form.Group>
 
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={store.loading}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {store.loading ? (
-                                <span className="flex items-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Signing in...
-                                </span>
-                            ) : (
-                                'Sign in'
+                            {/* Password Input */}
+                            <Form.Group className="mb-4">
+                                <Form.Label htmlFor="password" className="visually-hidden">
+                                    Password
+                                </Form.Label>
+                                <Form.Control
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    required
+                                    className={errors.password ? 'is-invalid' : ''}
+                                    placeholder="Password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                />
+                                {errors.password && (
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.password}
+                                    </Form.Control.Feedback>
+                                )}
+                            </Form.Group>
+
+                            {/* Mensajes de éxito/error del store */}
+                            {store.message && (
+                                <Alert
+                                    // Condicionalmente aplica 'success' o 'danger' basado en el mensaje
+                                    variant={store.message.includes('successful') || store.message.includes('success') ? 'success' : 'danger'}
+                                    className="mb-4" // Añade margen inferior
+                                >
+                                    <small>{store.message}</small> {/* text-sm */}
+                                </Alert>
                             )}
-                        </button>
-                    </div>
-                </form>
-            </div>
+
+                            {/* Submit Button */}
+                            <Button
+                                type="submit"
+                                variant="primary" // bg-indigo-600 hover:bg-indigo-700
+                                size="lg" // py-2 px-4, para que ocupe todo el ancho
+                                className="w-100 d-flex justify-content-center align-items-center fw-semibold rounded" // w-full flex justify-center, font-medium rounded-md
+                                disabled={store.loading} // disabled:opacity-50 disabled:cursor-not-allowed
+                            >
+                                {store.loading ? (
+                                    <>
+                                        <Spinner
+                                            as="span"
+                                            animation="border"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                            className="me-2" // -ml-1 mr-3
+                                        />
+                                        Signing in...
+                                    </>
+                                ) : (
+                                    'Sign in'
+                                )}
+                            </Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </Container>
         </div>
     );
 };

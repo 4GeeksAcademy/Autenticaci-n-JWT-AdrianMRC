@@ -18,12 +18,10 @@ load_dotenv()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-# Configurar CORS para permitir solicitudes desde el frontend
-CORS(app, origins=[
-    "https://miniature-bassoon-5gxw6q6g79q43vvqr-3000.app.github.dev",
-    "http://localhost:3000",  # Para desarrollo local
-    "http://127.0.0.1:3000"   # Para desarrollo local alternativo
-])
+backend_url = os.getenv("VITE_BACKEND_URL", "").replace('"', '').rstrip('/')
+
+# Permitir cualquier origen
+CORS(app, origins=["https://friendly-space-giggle-r4pj9g945x6rhxpvp-3000.app.github.dev"])
 
 # Configurar JWT
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")

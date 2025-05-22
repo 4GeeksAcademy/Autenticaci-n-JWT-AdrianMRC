@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from "../context/AppContext";
+// Importa los componentes de React-Bootstrap que vamos a usar
+import { Navbar as BSNavbar, Nav, Container, Button } from 'react-bootstrap';
 
 const Navbar = () => {
     const { store, actions } = useContext(AppContext);
@@ -12,55 +14,67 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-white shadow-lg border-b border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                    {/* Logo/Brand */}
-                    <div className="flex items-center">
-                        <Link to="/" className="flex-shrink-0 flex items-center">
-                        </Link>
-                    </div>
+        // Usamos el componente Navbar de React-Bootstrap
+        // bg-dark para un fondo oscuro, expand="lg" para responsividad en pantallas grandes
+        // variant="dark" para texto claro en el navbar oscuro
+        // className para estilos personalizados o gradientes si los quieres mantener
+        <BSNavbar expand="lg" variant="dark" className="shadow-lg py-3" style={{ background: 'linear-gradient(to right, #4c51bf, #667eea)' }}>
+            <Container fluid className="px-4"> {/* fluid para ancho completo, px-4 para padding */}
+                {/* Logo/Brand */}
+                <BSNavbar.Brand as={Link} to="/" className="d-flex align-items-center">
+                    <span className="text-white h4 mb-0 fw-bold">TuApp</span> {/* h4 para tamaño, mb-0 para quitar margen inferior, fw-bold para negrita */}
+                </BSNavbar.Brand>
 
-                    {/* Navigation Links */}
-                    <div className="flex items-center space-x-4">
+                {/* Toggler para pantallas pequeñas */}
+                <BSNavbar.Toggle aria-controls="basic-navbar-nav" />
+
+                {/* Contenido colapsable del Navbar */}
+                <BSNavbar.Collapse id="basic-navbar-nav">
+                    {/* ml-auto para alinear a la derecha los elementos de navegación */}
+                    <Nav className="ms-auto d-flex align-items-center">
                         {!store.isAuthenticated ? (
                             <>
-                                <Link
+                                <Nav.Link
+                                    as={Link}
                                     to="/login"
-                                    className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                    className="text-white me-3 fw-medium transition-colors-transform" // me-3 para margen derecho, fw-medium para seminegrita
                                 >
                                     Login
-                                </Link>
-                                <Link
+                                </Nav.Link>
+                                <Button
+                                    as={Link}
                                     to="/signup"
-                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                    variant="light" // Fondo blanco
+                                    className="fw-semibold shadow-sm transition-colors-transform" // fw-semibold para seminegrita, shadow-sm para sombra ligera
                                 >
                                     Sign Up
-                                </Link>
+                                </Button>
                             </>
                         ) : (
                             <>
-                                <Link
+                                <Nav.Link
+                                    as={Link}
                                     to="/private"
-                                    className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                    className="text-white me-3 fw-medium transition-colors-transform"
                                 >
                                     Dashboard
-                                </Link>
-                                <span className="text-gray-600 text-sm">
+                                </Nav.Link>
+                                <span className="text-info me-3 small fw-light"> {/* text-info para un azul claro, small para tamaño pequeño */}
                                     {store.user?.email}
                                 </span>
-                                <button
+                                <Button
                                     onClick={handleLogout}
-                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                    variant="danger" // Botón rojo
+                                    className="fw-medium shadow-sm transition-colors-transform"
                                 >
                                     Logout
-                                </button>
+                                </Button>
                             </>
                         )}
-                    </div>
-                </div>
-            </div>
-        </nav>
+                    </Nav>
+                </BSNavbar.Collapse>
+            </Container>
+        </BSNavbar>
     );
 };
 

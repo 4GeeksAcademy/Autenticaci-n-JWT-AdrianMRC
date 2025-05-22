@@ -1,0 +1,54 @@
+/* src/index.css */
+
+/* Asegúrate de que esto esté aquí */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Custom CSS for Home component transitions and gradients */
+
+/* Text Gradient for AuthApp title */
+.text-gradient-primary {
+    background-image: linear-gradient(to right, #4c51bf, #3b82f6); /* from-indigo-600 to-blue-600 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback */
+}
+
+/* General transition for cards and buttons for hover effects */
+.transition-transform-shadow {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.transition-transform-shadow:hover {
+    transform: scale(1.03); /* Ligeramente menos que 1.05 para que no sea tan exagerado */
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important; /* Más sombra al pasar el ratón */
+}
+
+/* Feature card hover effect */
+.feature-card-hover:hover {
+    transform: translateY(-5px); /* Ligeramente hacia arriba */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; /* Una sombra más sutil */
+}
+
+/* Icon rotation on hover */
+.feature-card-hover .feature-icon-bounce {
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature-card-hover:hover .feature-icon-bounce {
+    transform: rotate(6deg); /* Gira 6 grados al pasar el ratón */
+}
+
+/* Custom color for purple */
+.bg-purple-subtle {
+    background-color: rgba(128, 0, 128, 0.1); /* Equivalent to purple-100 */
+}
+.text-purple {
+    color: #800080; /* Equivalent to purple-600 */
+}
+
+/* Ensure consistent text styling for strong tags inside lead paragraphs */
+.lead strong {
+    font-weight: bold; /* Asegura que 'strong' siga siendo negrita */
+}
+

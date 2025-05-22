@@ -70,20 +70,21 @@ def create_user():
         return jsonify({"message": "La contraseña debe tener al menos 8 caracteres"}), 400
     try:
         # Crear nuevo usuario
-        hashed_password = bcrypt.generate_password_hash(data_request["password"]).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(
+            data_request["password"]).decode('utf-8')
         new_user = User(
             email=data_request["email"],
             password=hashed_password
         )
-        
+
         db.session.add(new_user)
         db.session.commit()
-        
+
         return jsonify({
             "message": "Usuario creado exitosamente",
             "user": new_user.serialize()
         }), 201
-        
+
     except Exception as e:
         print(e)
         db.session.rollback()
